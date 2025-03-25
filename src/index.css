@@ -1,0 +1,157 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "DM Mono", monospace;
+}
+
+body {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+.chat-bot-popup {
+  position: relative;
+  border-radius: 8px;
+  width: 500px;
+  overflow: hidden;
+  background-color: #1e1e1e;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.chat-bot-popup .chat-header {
+  display: flex;
+  padding: 12px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #252525;
+  border-bottom: 1px solid #333;
+}
+
+.chat-header .header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-info svg {
+  height: 35px;
+  width: 35px;
+  padding: 6px;
+  filter: invert(75%);
+}
+
+.header-info .logo-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #eeeeee;
+}
+
+.chat-header button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #e0e0e0;
+}
+
+.chat-body {
+  padding: 20px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.chat-body .msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-body .bot-msg svg {
+  height: 35px;
+  width: 35px;
+  padding: 6px;
+  filter: invert(75%);
+}
+
+.chat-body .msg .msg-text {
+  padding: 12px;
+  max-width: 75%;
+  word-wrap: break-word;
+  white-space: pre-line;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.chat-body .bot-msg .msg-text {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.chat-body .user-msg {
+  flex-direction: column;
+  align-items: flex-end;
+  font-weight: 500;
+}
+
+.chat-body .user-msg .msg-text {
+  color: #121212;
+  background: #cccccc;
+  border-radius: 50px;
+}
+
+.chat-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 15px;
+  background: #1e1e1e;
+  border-top: 1px solid #333;
+}
+
+.chat-footer .chat-inp {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  background: #252525;
+  padding: 5px;
+}
+
+.chat-inp .msg-inp {
+  width: 100%;
+  height: 40px;
+  padding: 0px 15px;
+  border: none;
+  color: #e0e0e0;
+  background: none;
+  outline: none;
+}
+
+.chat-inp button {
+  display: none;
+  border: none;
+  background: none;
+  color: #dadada;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.msg-inp:valid + button {
+  display: block;
+}
+
+.invert-svg {
+  filter: invert(75%);
+}
