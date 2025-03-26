@@ -1,5 +1,5 @@
 import React from "react";
-import ChatBotIcon from "./chatBotIcon";
+import ChatBotIcon from "./ChatBotIcon";
 
 const Chatmsg = ({ chat }) => {
   return (
