@@ -1,8 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import ChatBotIcon from "./components/chatBotIcon";
 import ChatForm from "./components/ChatForm";
+import Chatmsg from "./components/Chatmsg";
 
 const App = () => {
+  const [chatHistory, setChatHistory] = useState([]);
+
+  const updateHistory = (text) => {
+    setChatHistory((prev) =>
+      prev.map((msg) =>
+        msg.text === "Analysing..." ? { role: "model", text } : msg
+      )
+    );
+  };
+
+  const generateBotResponse = async (history) => {
+    const formattedHistory = history.map(({ role, text }) => ({
+      role,
+      parts: [{ text }],
+    }));
+
+    const API_KEY = import.meta.env.VITE_API_URL;
+    if (!API_KEY) {
+      console.error("API URL is missing. Check your .env file.");
+      return;
+    }
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ contents: formattedHistory }),
+    };
+
+    try {
+      const response = await fetch(API_KEY, requestOptions);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`);
+      }
+      const data = await response.json();
+
+      // Ensure response structure is correct
+      const apiResponseData =
+        data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
+
+      updateHistory(apiResponseData.trim());
+    } catch (error) {
+      console.error("Error fetching response:", error);
+      updateHistory("Sorry, I couldn't process your request.");
+    }
+  };
+
   return (
     <div className="container">
       <div className="chat-bot-popup">
@@ -11,19 +60,22 @@ const App = () => {
             <ChatBotIcon />
             <h2 className="logo-text">Chat Bot</h2>
           </div>
-          <button class="material-symbols-rounded">keyboard_arrow_down</button>
         </div>
         <div className="chat-body">
           <div className="msg bot-msg">
             <ChatBotIcon />
-            <p clasName="msg-text">Hello there good moring</p>
+            <p className="msg-text">Hello there!!🙋‍♂️</p>
           </div>
-          <div className="msg user-msg">
-            <p className="msg-text">Hello man i want some help!</p>
-          </div>
+          {chatHistory.map((chat, index) => (
+            <Chatmsg key={index} chat={chat} />
+          ))}
         </div>
         <div className="chat-footer">
-          <ChatForm />
+          <ChatForm
+            chatHistory={chatHistory}
+            setChatHistory={setChatHistory}
+            generateBotResponse={generateBotResponse}
+          />
         </div>
       </div>
     </div>
