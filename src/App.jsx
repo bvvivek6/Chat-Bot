@@ -6,14 +6,6 @@ import Chatmsg from "./components/Chatmsg";
 const App = () => {
   const [chatHistory, setChatHistory] = useState([]);
 
-  const updateHistory = (text) => {
-    setChatHistory((prev) =>
-      prev.map((msg) =>
-        msg.text === "Analysing..." ? { role: "model", text } : msg
-      )
-    );
-  };
-
   const generateBotResponse = async (history) => {
     const formattedHistory = history.map(({ role, text }) => ({
       role,
@@ -23,32 +15,25 @@ const App = () => {
     const API_KEY = import.meta.env.VITE_API_URL;
     if (!API_KEY) {
       console.error("API URL is missing. Check your .env file.");
-      return;
+      return "Error: API URL missing";
     }
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ contents: formattedHistory }),
-    };
-
     try {
-      const response = await fetch(API_KEY, requestOptions);
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-      }
+      const response = await fetch(API_KEY, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contents: formattedHistory }),
+      });
+
+      if (!response.ok) throw new Error(`API Error: ${response.status}`);
+
       const data = await response.json();
-
-      // Ensure response structure is correct
-      const apiResponseData =
-        data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
-
-      updateHistory(apiResponseData.trim());
+      return (
+        data.candidates?.[0]?.content?.parts?.[0]?.text.trim() || "No response"
+      );
     } catch (error) {
       console.error("Error fetching response:", error);
-      updateHistory("Sorry, I couldn't process your request.");
+      return "Sorry, I couldn't process your request.";
     }
   };
 
