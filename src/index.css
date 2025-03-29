@@ -26,7 +26,8 @@
 body {
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  margin-top: 25px;
   justify-content: center;
   min-height: 100vh;
   background-color: #121212;
@@ -175,12 +176,12 @@ body {
 @media screen and (max-width: 768px) {
   .chat-bot-popup {
     width: 95vw;
-    height: 90vh;
+    height: 93dvh;
   }
 
   .chat-body {
     padding: 15px;
-    padding-bottom: 90px; /* Adjust for footer */
+    padding-bottom: 90px;
   }
 
   .chat-footer {
