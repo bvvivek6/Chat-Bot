@@ -7,10 +7,13 @@ const App = () => {
   const [chatHistory, setChatHistory] = useState([]);
 
   const generateBotResponse = async (history) => {
-    const formattedHistory = history.map(({ role, text }) => ({
-      role,
-      parts: [{ text }],
-    }));
+    const formattedHistory = history.map(({ role, text, image }) => {
+      let parts = [{ text }];
+      if (image) {
+        parts.push({ inline_data: { mime_type: "image/jpeg", data: image } });
+      }
+      return { role, parts };
+    });
 
     const API_KEY = import.meta.env.VITE_API_URL;
     if (!API_KEY) {
@@ -36,7 +39,6 @@ const App = () => {
       return "Sorry, I couldn't process your request.";
     }
   };
-
   return (
     <div className="container">
       <div className="chat-bot-popup">

@@ -192,3 +192,49 @@ body {
     height: 35px;
   }
 }
+
+.custom-file-upload {
+  display: flex;
+  flex-direction: row;
+  width: 145px;
+  align-items: center;
+  background-color: #000000;
+  color: white;
+  padding: 8px 8px 8px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 500;
+  margin-right: 6px;
+  transition: background 0.3s ease;
+}
+
+.custom-file-upload svg {
+  margin-right: 6px;
+}
+
+.custom-file-upload:hover {
+  background-color: #2a2a2a;
+}
+
+.file-inp {
+  display: none;
+}
+
+.preview-img {
+  max-width: 100px;
+  max-height: 100px;
+  display: block;
+  margin-top: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.chat-img {
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin: 5px 0;
+  object-fit: cover;
+  display: block;
+}
