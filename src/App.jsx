@@ -7,38 +7,45 @@ const App = () => {
   const [chatHistory, setChatHistory] = useState([]);
 
   const generateBotResponse = async (history) => {
-    const formattedHistory = history.map(({ role, text, image }) => {
-      let parts = [{ text }];
-      if (image) {
-        parts.push({ inline_data: { mime_type: "image/jpeg", data: image } });
-      }
-      return { role, parts };
+  const formattedHistory = history.map(({ role, text, image }) => {
+    let parts = [{ text }];
+    if (image) {
+      parts.push({ inline_data: { mime_type: "image/jpeg", data: image } });
+    }
+    return { role, parts };
+  });
+
+  const API_KEY = import.meta.env.VITE_API_URL;
+  if (!API_KEY) {
+    console.error("API URL is missing. Check your .env file.");
+    return "Error: API URL missing";
+  }
+
+  try {
+    const response = await fetch(API_KEY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contents: formattedHistory }),
     });
 
-    const API_KEY = import.meta.env.VITE_API_URL;
-    if (!API_KEY) {
-      console.error("API URL is missing. Check your .env file.");
-      return "Error: API URL missing";
-    }
+    if (!response.ok) throw new Error(`API Error: ${response.status}`);
 
-    try {
-      const response = await fetch(API_KEY, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contents: formattedHistory }),
-      });
+    const data = await response.json();
+    const fullText = data.candidates?.[0]?.content?.parts?.[0]?.text.trim() || "No response";
 
-      if (!response.ok) throw new Error(`API Error: ${response.status}`);
+    return shortenResponse(fullText);
+  } catch (error) {
+    console.error("Error fetching response:", error);
+    return "Sorry, I couldn't process your request.";
+  }
+};
 
-      const data = await response.json();
-      return (
-        data.candidates?.[0]?.content?.parts?.[0]?.text.trim() || "No response"
-      );
-    } catch (error) {
-      console.error("Error fetching response:", error);
-      return "Sorry, I couldn't process your request.";
-    }
-  };
+// Helper to shorten and clean up long Gemini responses
+const shortenResponse = (text) => {
+  const cleanText = text.replace(/As an AI language model.*?(\.|\n)/g, ""); // remove disclaimers
+  const sentences = cleanText.split('. ').slice(0, 2).join('. ').trim();
+  return sentences.endsWith('.') ? sentences : sentences + '.';
+};
   return (
     <div className="container">
       <div className="chat-bot-popup">
